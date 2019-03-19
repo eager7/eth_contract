@@ -1,8 +1,7 @@
-pragma solidity ^0.4.4;
+pragma solidity ^0.5.0;
 
 contract HelloWorld {
-    function HelloWorld() returns (bytes3) {
-        bytes3 str = "hello world!";
-        return str;
+    function helloWorld() external pure returns (string memory) {
+        return "Hello, World!";
     }
 }
