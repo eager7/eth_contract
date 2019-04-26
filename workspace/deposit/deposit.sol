@@ -2,7 +2,6 @@ pragma solidity ^0.5.0;
 
 contract deposit {
     address public owner;
-    uint256 public balance;
 
     event Deposit(address indexed _from, uint256 indexed _value);
     event Withdrawal(address indexed _to, uint256 indexed _value);
@@ -11,15 +10,20 @@ contract deposit {
         owner = msg.sender;
     }
 
-    function withdrawal(address _to, uint256 _value) public {
-        msg.sender.transfer(balance);
-        emit Withdrawal(_to, _value);
+    function withdrawal(uint256 _value) public {
+        if (_value < address(this).balance) {
+            msg.sender.transfer(_value);
+        }
+        emit Withdrawal(msg.sender, _value);
     }
 
     function() payable external {
         if (msg.value > 0){
-            balance += msg.value;
             emit Deposit(msg.sender, msg.value);
         }
+    }
+
+    function Balance() public view returns(uint256) {
+        return address(this).balance;
     }
 }
