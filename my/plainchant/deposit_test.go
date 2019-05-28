@@ -18,13 +18,14 @@ func TestDeposit(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	contract := common.HexToAddress("0x4cfcd906dfea370d9d7cc62b48b7147ca60f0f99")
+	contract := common.HexToAddress("0xcb432f91e822071480ce4dcc12822bbbc04bef96")
 	instance, err := NewPct(contract, client)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	balance, err := instance.BalanceOf(&bind.CallOpts{}, common.Address{})
+	from := common.HexToAddress("0x71A5C1aeaE4CEB1A9cC287E9f9af708fD19CfCF0")
+	balance, err := instance.BalanceOf(&bind.CallOpts{}, from)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -35,14 +36,14 @@ func TestDeposit(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Log("transfer:", cAbi.Methods["transfer"])
-	data, err := cAbi.Pack("transfer", common.Address{}, new(big.Int).SetUint64(1))
+	data, err := cAbi.Pack("transfer", from, new(big.Int).SetUint64(10000))
 	if err != nil {
 		t.Fatal(err)
 	}
 	t.Log("data hex:", hex.EncodeToString(data))
 
 	call := ethereum.CallMsg{
-		From:     common.HexToAddress("0x4cfcd906dfea370d9d7cc62b48b7147ca60f0f99"),
+		From:     from,
 		To:       &contract,
 		Gas:      0,
 		GasPrice: nil,
